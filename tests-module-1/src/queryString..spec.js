@@ -9,6 +9,26 @@ describe('Object to string', () => {
 
     expect(queryString(obj)).toBe('name=Guilherme&profession=developer');
   });
+
+  it('should ccreate a valid query string even when an array is passed as value', () => {
+    const obj = {
+      name: 'Guilherme',
+      abilities: ['JS', 'TDD'],
+    };
+
+    expect(queryString(obj)).toBe('name=Guilherme&abilities=JS,TDD');
+  });
+
+  it('should throw an error when an object is passed as value', () => {
+    const obj = {
+      name: 'Guilherme',
+      abilities: { first: 'JS', second: 'TDD' },
+    };
+
+    expect(() => {
+      queryString(obj);
+    }).toThrowError();
+  });
 });
 
 // describe('Query string to object');
