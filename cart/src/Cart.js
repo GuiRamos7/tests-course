@@ -21,7 +21,18 @@ export class Cart {
 
   getTotal() {
     return this.items.reduce((acc, item) => {
-      return acc.add(Dinero({ amount: item.quantity * item.product.price }));
+      const amount = Dinero({ amount: item.quantity * item.product.price });
+      let discount = Dinero({ amount: 0 });
+
+      if (
+        item.condition &&
+        item.condition.percentage &&
+        item.condition.minimum <= item.quantity
+      ) {
+        discount = amount.percentage(item.condition.percentage);
+      }
+
+      return acc.add(amount).subtract(discount);
     }, Dinero({ amount: 0 }));
   }
 
