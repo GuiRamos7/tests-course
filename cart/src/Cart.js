@@ -19,8 +19,17 @@ export class Cart {
   }
 
   getTotal() {
-    return this.items.reduce((acc, item, idx) => {
-      return acc + item.product.price * item.quantity;
+    return this.items.reduce((acc, item) => {
+      console.log(item.product);
+
+      return acc + item.quantity * item.product.price;
     }, 0);
+  }
+
+  checkout() {
+    return {
+      total: this.getTotal(),
+      items: this.items,
+    };
   }
 }
