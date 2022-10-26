@@ -55,5 +55,25 @@ describe('Cart', () => {
 
       expect(cart.checkout()).toMatchSnapshot();
     });
+
+    it('should  return an object with the total and the list of items when summary() is called', () => {
+      cart.add({
+        product: product2,
+        quantity: 5,
+      });
+
+      expect(cart.checkout()).toMatchSnapshot();
+    });
+
+    it('should reset tje cart when checkout() is called', () => {
+      cart.add({
+        product: product2,
+        quantity: 5,
+      });
+
+      cart.checkout();
+
+      expect(cart.getTotal()).toEqual(0);
+    });
   });
 });

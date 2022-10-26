@@ -20,16 +20,28 @@ export class Cart {
 
   getTotal() {
     return this.items.reduce((acc, item) => {
-      console.log(item.product);
-
       return acc + item.quantity * item.product.price;
     }, 0);
   }
 
-  checkout() {
+  summary() {
+    const total = this.getTotal();
+    const items = this.items;
+
     return {
-      total: this.getTotal(),
-      items: this.items,
+      total,
+      items,
+    };
+  }
+
+  checkout() {
+    const { items, total } = this.summary();
+
+    this.items = [];
+
+    return {
+      total,
+      items,
     };
   }
 }
