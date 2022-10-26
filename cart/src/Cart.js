@@ -1,5 +1,6 @@
 import find from 'lodash/find';
 import remove from 'lodash/remove';
+import Dinero from 'dinero.js';
 
 export class Cart {
   items = [];
@@ -20,12 +21,12 @@ export class Cart {
 
   getTotal() {
     return this.items.reduce((acc, item) => {
-      return acc + item.quantity * item.product.price;
-    }, 0);
+      return acc.add(Dinero({ amount: item.quantity * item.product.price }));
+    }, Dinero({ amount: 0 }));
   }
 
   summary() {
-    const total = this.getTotal();
+    const total = this.getTotal().getAmount();
     const items = this.items;
 
     return {
