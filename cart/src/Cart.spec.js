@@ -65,6 +65,19 @@ describe('Cart', () => {
       expect(cart.checkout()).toMatchSnapshot();
     });
 
+    it('Should include formatted amount in the summary', () => {
+      cart.add({
+        product,
+        quantity: 5,
+      });
+      cart.add({
+        product: product2,
+        quantity: 3,
+      });
+
+      expect(cart.summary().formatted).toEqual('$3,269.40');
+    });
+
     it('should reset tje cart when checkout() is called', () => {
       cart.add({
         product: product2,
@@ -134,6 +147,7 @@ describe('Cart', () => {
 
       expect(cart.getTotal().getAmount()).toEqual(70776);
     });
+
     it('should NOT apply percentage discount for even quantities below', () => {
       const condition = {
         quantity: 2,
@@ -146,6 +160,41 @@ describe('Cart', () => {
       });
 
       expect(cart.getTotal().getAmount()).toEqual(70776);
+    });
+
+    it('should receive two or more conditions and determine/apply the best discount. First case.', () => {
+      const condition = {
+        percentage: 35,
+        minimum: 2,
+      };
+      const condition2 = {
+        quantity: 2,
+      };
+
+      cart.add({
+        product,
+        quantity: 5,
+        condition: [condition, condition2],
+      });
+
+      expect(cart.getTotal().getAmount()).toEqual(106164);
+    });
+    it('should receive two or more conditions and determine/apply the best discount. Second case.', () => {
+      const condition = {
+        percentage: 80,
+        minimum: 2,
+      };
+      const condition2 = {
+        quantity: 2,
+      };
+
+      cart.add({
+        product,
+        quantity: 5,
+        condition: [condition, condition2],
+      });
+
+      expect(cart.getTotal().getAmount()).toEqual(35388);
     });
   });
 });
